@@ -6,10 +6,18 @@ import random
 import sys
 import math
 
+xAxisLimits = [-300, 300]
+yAxisLimits = [-300, 300]
+
 
 def randomColor():
     return [i/255 for i in random.choices(range(256), k=3)]
 
+def randomEllipseRadius():
+    return random.randint(0,(xAxisLimits[1]-xAxisLimits[0])/2)
+
+def randomCenter():
+    return [i for i in random.choices(range(-150,150),k=2)]
 
 def generalEllipseY(center, rx, ry, x):
     cal = (ry/rx)*(((rx)**2-(center[0]-x)**2)**0.5)
@@ -32,9 +40,9 @@ def EllipseParaY(center, rx, ry, theta):
 def draw():
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glClear(GL_COLOR_BUFFER_BIT)
-    drawEllipseGeneral((-100, 0), 160, 100, [0, 0, 0])
-    drawEllipseParametric((-100, 0), 100, 160, [0, 0, 0])
-    drawEllipseMED((180, 0), 100, 160, [0, 0, 0])
+    drawEllipseGeneral(randomCenter(), randomEllipseRadius(), randomEllipseRadius(), randomColor())
+    drawEllipseParametric(randomCenter(), randomEllipseRadius(),randomEllipseRadius(), randomColor())
+    drawEllipseMED(randomCenter(), randomEllipseRadius(),randomEllipseRadius(), randomColor())
     glFlush()
 
 
@@ -135,10 +143,8 @@ glutInitWindowSize(1000, 720)
 glutCreateWindow("Ellipse")
 glClearColor(1, 1, 1, 0)
 glMatrixMode(GL_PROJECTION)
-gluOrtho2D(-300.0, 300.0, -300.0, 300.0)
+gluOrtho2D(xAxisLimits[0], xAxisLimits[1], yAxisLimits[0], yAxisLimits[1])
 glutDisplayFunc(draw)
 glutMainLoop()
 
 
-print(LinesBresenham)
-print(LinesDDA)
