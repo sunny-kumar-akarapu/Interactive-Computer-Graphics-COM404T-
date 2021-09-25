@@ -6,41 +6,31 @@ import random
 import sys
 import math
 
-
-def ROUND(a):
-    return int(a + 0.5)
+xAxisLimits = [-800, 800]
+yAxisLimits = [-800, 800]
 
 
 def randomColor():
     return [i/255 for i in random.choices(range(256), k=3)]
 
 
+def randomEllipseRadius():
+    return random.randint(0, (xAxisLimits[1]-xAxisLimits[0])/2)
+
+
+def randomCenter():
+    return [i for i in random.choices(range(-150, 150), k=2)]
+
+def randomAngle():
+    return random.randint(0,360)
+
 def draw():
     glClearColor(1.0, 1.0, 1.0, 0.0)
     glClear(GL_COLOR_BUFFER_BIT)
-    # drawDDA((-300,0),(300,0),[1,0,1])
-    # drawDDA((0,-300),(0,300),[1,0,1])
-    # drawEllipseMED((0, 0), 100, 160, [0, 0, 0])
-    # drawEllipseMED((0, 0), 160, 100, [0, 0, 0])
-    drawEllipseArc((0, 0), 100, 160, 30, 75, [1, 0, 0])
-    # drawEllipseArc((0, 0), 160, 100, 0, 90, [1, 0, 0])
+    drawEllipseArc(randomCenter(), randomEllipseRadius(),
+                   randomEllipseRadius(), randomAngle(), randomAngle(), randomColor())
     glFlush()
 
-
-def drawDDA(p1, p2, color=[0, 0, 0]):
-    x1, y1, x2, y2 = p1[0], p1[1], p2[0], p2[1]
-    x, y = x1, y1
-    length = abs(x2-x1) if abs(x2-x1) > abs(y2-y1) else abs(y2-y1)
-    dx = (x2-x1)/float(length)
-    dy = (y2-y1)/float(length)
-    glColor3f(color[0], color[1], color[2])
-    glBegin(GL_POINTS)
-    glVertex2i(ROUND(x), ROUND(y))
-    for i in range(int(length)):
-        x += dx
-        y += dy
-        glVertex2i(ROUND(x), ROUND(y))
-    glEnd()
 
 
 def drawEllipseArc(center, rx, ry, startAngle, endAngle, color):
@@ -225,7 +215,7 @@ glutInitWindowSize(1000, 720)
 glutCreateWindow("Ellipse ARC")
 glClearColor(1, 1, 1, 0)
 glMatrixMode(GL_PROJECTION)
-gluOrtho2D(-300.0, 300.0, -300.0, 300.0)
+gluOrtho2D(xAxisLimits[0], xAxisLimits[1], yAxisLimits[0], yAxisLimits[1])
 glutDisplayFunc(draw)
 glutMainLoop()
 
